@@ -1,0 +1,34 @@
+Rahul Sharma
+Email: rahul.sharma@email.com | Phone: +91-9876543210
+
+PROFESSIONAL SUMMARY
+Backend Software Engineer with 4 years of experience building scalable web
+applications using Python and Django. Strong background in REST API design,
+relational databases, and cloud deployment.
+
+TECHNICAL SKILLS
+Python, Django, Flask, REST API, SQL, MySQL, PostgreSQL, AWS, Docker,
+Kubernetes, Git, Linux, CI/CD, Agile, Scrum
+
+WORK EXPERIENCE
+Backend Developer — Fintech Solutions Pvt Ltd (2021 - Present)
+- Designed and developed REST APIs using Django REST Framework for a
+  payments platform processing 50,000+ transactions daily.
+- Migrated monolithic services to Docker containers deployed on AWS ECS,
+  reducing deployment time by 40%.
+- Optimized PostgreSQL queries, improving API response time by 30%.
+- Collaborated with a cross-functional Agile team using Scrum ceremonies.
+
+Software Engineer Intern — TechStart Labs (2020 - 2021)
+- Built internal tools using Flask and MySQL.
+- Wrote unit tests with pytest, increasing code coverage to 85%.
+
+PROJECTS
+- Inventory Management System: Python, Django, PostgreSQL, AWS S3.
+- Real-time Chat App: Flask, WebSockets, Redis.
+
+EDUCATION
+B.Tech in Computer Science, National Institute of Technology (2017-2021)
+
+CERTIFICATIONS
+AWS Certified Developer – Associate

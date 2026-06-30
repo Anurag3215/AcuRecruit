@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Recruiter Dashboard{% endblock %}
+{% block content %}
+
+<div class="row-between">
+  <div>
+    <span class="page-eyebrow"><i class="fa-solid fa-user-tie"></i> Recruiter Console</span>
+    <h2 style="margin-bottom:4px;">My Job Postings</h2>
+    <p class="page-subtitle">Create job descriptions and let the AI agent screen candidates for you.</p>
+  </div>
+  <a href="{{ url_for('create_job') }}" class="btn"><i class="fa-solid fa-plus"></i> New Job Description</a>
+</div>
+
+<div class="card slide-up">
+  <div class="table-toolbar">
+    <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
+      <span class="card-icon"><i class="fa-solid fa-list-check"></i></span>
+      Active Postings
+    </h3>
+    <div class="table-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search jobs..." data-table-search="jobs-table" aria-label="Search jobs">
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table id="jobs-table">
+      <thead>
+        <tr><th>Job Title</th><th>Created</th><th>Resumes</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for job in jobs %}
+        <tr>
+          <td><strong style="color:var(--text-primary);">{{ job.title }}</strong></td>
+          <td>{{ job.created_at.strftime('%d %b %Y') }}</td>
+          <td><span class="badge badge-indigo"><i class="fa-solid fa-file-lines"></i> {{ job.resumes|length }}</span></td>
+          <td><a class="btn-small" href="{{ url_for('job_detail', job_id=job.id) }}"><i class="fa-solid fa-arrow-right"></i> Open</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">
+          <div class="empty-state">
+            <i class="fa-solid fa-briefcase"></i>
+            No job descriptions yet. Create one to start screening resumes.
+          </div>
+        </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ resume.candidate_name }}{% endblock %}
+{% block content %}
+
+<p>
+  <a href="{{ url_for('job_detail', job_id=resume.job_id) }}" style="font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+    <i class="fa-solid fa-arrow-left"></i> Back to job
+  </a>
+</p>
+
+<span class="page-eyebrow"><i class="fa-solid fa-id-card"></i> Candidate Profile</span>
+<h2>{{ resume.candidate_name }}</h2>
+
+<div class="card slide-up">
+  <h3 style="display:flex; align-items:center; gap:10px;">
+    <span class="card-icon"><i class="fa-solid fa-gauge-high"></i></span>
+    Score &amp; Match Summary
+  </h3>
+  <div class="score-ring-wrap">
+    <div class="score-ring" style="--pct: {{ resume.score }};">
+      <span class="score-ring-value">{{ resume.score }}%</span>
+      <span class="score-ring-sub">Match</span>
+    </div>
+    <div class="score-meta-list">
+      <div class="meta-item">Rank in this job: <strong>#{{ resume.rank }}</strong></div>
+      <div class="meta-item">
+        Match tier:
+        {% if resume.score >= 75 %}<span class="badge badge-green"><i class="fa-solid fa-star"></i> High Match</span>
+        {% elif resume.score >= 50 %}<span class="badge badge-amber"><i class="fa-solid fa-star-half-stroke"></i> Medium Match</span>
+        {% else %}<span class="badge badge-grey"><i class="fa-regular fa-star"></i> Low Match</span>{% endif %}
+      </div>
+      <div class="meta-item">
+        Status:
+        {% if resume.status == 'shortlisted' %}<span class="badge badge-green"><i class="fa-solid fa-check"></i> Shortlisted</span>
+        {% elif resume.status == 'rejected' %}<span class="badge badge-red"><i class="fa-solid fa-xmark"></i> Rejected</span>
+        {% else %}<span class="badge badge-grey"><i class="fa-regular fa-clock"></i> Pending</span>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top:22px; font-weight:600; color:var(--text-primary);">Matched Keywords</p>
+  <div class="keyword-pills">
+    {% for k in resume.matched_keywords.split(', ') if k %}
+      <span class="pill"><i class="fa-solid fa-tag" style="font-size:10px;"></i> {{ k }}</span>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card slide-up">
+  <h3 style="display:flex; align-items:center; gap:10px;">
+    <span class="card-icon"><i class="fa-solid fa-comments"></i></span>
+    AI-Generated HR Interview Questions
+  </h3>
+  <ol class="questions-list">
+    {% for q in resume.interview_questions.split('\n') if q %}
+      <li>{{ q }}</li>
+    {% endfor %}
+  </ol>
+</div>
+
+<div class="card slide-up">
+  <h3 style="display:flex; align-items:center; gap:10px;">
+    <span class="card-icon"><i class="fa-solid fa-file-lines"></i></span>
+    Extracted Resume Text (preview)
+  </h3>
+  <pre class="resume-preview">{{ resume.raw_text[:2000] }}{% if resume.raw_text|length > 2000 %}...{% endif %}</pre>
+</div>
+{% endblock %}

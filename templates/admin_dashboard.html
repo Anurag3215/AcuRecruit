@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+<span class="page-eyebrow"><i class="fa-solid fa-shield-halved"></i> Admin Console</span>
+<h2>Admin Dashboard</h2>
+<p class="page-subtitle">Manage recruiter access and monitor platform-wide screening activity.</p>
+
+<div class="stats-row" style="margin-top:24px;">
+  <div class="stat-card slide-up slide-up-1">
+    <div class="stat-icon icon-bg-indigo"><i class="fa-solid fa-users"></i></div>
+    <div class="stat-num" data-count="{{ recruiters|length }}">0</div>
+    <div class="stat-label">Recruiters</div>
+  </div>
+  <div class="stat-card slide-up slide-up-2">
+    <div class="stat-icon icon-bg-cyan"><i class="fa-solid fa-briefcase"></i></div>
+    <div class="stat-num" data-count="{{ total_jobs }}">0</div>
+    <div class="stat-label">Job Postings</div>
+  </div>
+  <div class="stat-card slide-up slide-up-3">
+    <div class="stat-icon icon-bg-emerald"><i class="fa-solid fa-file-circle-check"></i></div>
+    <div class="stat-num" data-count="{{ total_resumes }}">0</div>
+    <div class="stat-label">Resumes Screened</div>
+  </div>
+</div>
+
+<div class="card slide-up">
+  <div class="card-header-row">
+    <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
+      <span class="card-icon"><i class="fa-solid fa-user-plus"></i></span>
+      Add Recruiter (HR)
+    </h3>
+  </div>
+  <form method="POST" action="{{ url_for('add_recruiter') }}" class="inline-form">
+    <div class="field input-icon-wrap">
+      <label for="add-rec-name">Full name</label>
+      <i class="fa-regular fa-user field-icon"></i>
+      <input id="add-rec-name" type="text" name="name" placeholder="Jane Cooper" required>
+    </div>
+    <div class="field input-icon-wrap">
+      <label for="add-rec-email">Email</label>
+      <i class="fa-regular fa-envelope field-icon"></i>
+      <input id="add-rec-email" type="email" name="email" placeholder="jane@company.com" required>
+    </div>
+    <div class="field input-icon-wrap password-wrap">
+      <label for="add-rec-password">Password</label>
+      <i class="fa-solid fa-lock field-icon"></i>
+      <input id="add-rec-password" type="password" name="password" placeholder="Set a password" required>
+      <button type="button" class="toggle-password" tabindex="-1" aria-label="Show password">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+    </div>
+    <button type="submit" class="btn"><i class="fa-solid fa-plus"></i> Add Recruiter</button>
+  </form>
+</div>
+
+<div class="card slide-up">
+  <div class="table-toolbar">
+    <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
+      <span class="card-icon"><i class="fa-solid fa-people-group"></i></span>
+      Manage Recruiters
+    </h3>
+    <div class="table-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search recruiters..." data-table-search="recruiters-table" aria-label="Search recruiters">
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table id="recruiters-table">
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Status</th><th>Jobs Created</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for r in recruiters %}
+        <tr>
+          <td><strong style="color:var(--text-primary);">{{ r.name }}</strong></td>
+          <td>{{ r.email }}</td>
+          <td>
+            {% if r.is_active_flag %}<span class="badge badge-green"><i class="fa-solid fa-circle-check"></i> Active</span>
+            {% else %}<span class="badge badge-red"><i class="fa-solid fa-circle-xmark"></i> Disabled</span>{% endif %}
+          </td>
+          <td>{{ r.jobs|length }}</td>
+          <td class="actions">
+            <form method="POST" action="{{ url_for('toggle_recruiter', user_id=r.id) }}">
+              <button class="btn-small" type="submit">
+                <i class="fa-solid {{ 'fa-toggle-off' if r.is_active_flag else 'fa-toggle-on' }}"></i>
+                {{ 'Disable' if r.is_active_flag else 'Enable' }}
+              </button>
+            </form>
+            <form method="POST" action="{{ url_for('remove_recruiter', user_id=r.id) }}"
+                  onsubmit="return confirm('Remove this recruiter and all their jobs/resumes?');">
+              <button class="btn-small btn-danger" type="submit"><i class="fa-solid fa-trash"></i> Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">
+          <div class="empty-state">
+            <i class="fa-solid fa-user-group"></i>
+            No recruiters added yet. Add your first recruiter above.
+          </div>
+        </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

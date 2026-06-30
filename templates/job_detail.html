@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }}{% endblock %}
+{% block content %}
+
+<span class="page-eyebrow"><i class="fa-solid fa-briefcase"></i> Job Posting</span>
+<h2>{{ job.title }}</h2>
+
+<div class="card slide-up">
+  <h3 style="display:flex; align-items:center; gap:10px;">
+    <span class="card-icon"><i class="fa-solid fa-file-lines"></i></span>
+    Job Description
+  </h3>
+  <p class="jd-text">{{ job.description }}</p>
+</div>
+
+<div class="card slide-up">
+  <h3 style="display:flex; align-items:center; gap:10px;">
+    <span class="card-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+    Bulk Upload Resumes
+  </h3>
+  <form method="POST" action="{{ url_for('upload_resumes', job_id=job.id) }}" enctype="multipart/form-data">
+    <label class="upload-box" for="resume-upload-input">
+      <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+      <div class="upload-title">Drag &amp; drop resumes here, or click to browse</div>
+      <div class="upload-sub">Supports multiple PDF, DOCX, or TXT files</div>
+      <input id="resume-upload-input" type="file" name="resumes" multiple accept=".pdf,.docx,.txt" required>
+      <div class="upload-filenames"></div>
+    </label>
+    <button type="submit" class="btn" style="width:100%; margin-top:18px;">
+      <i class="fa-solid fa-robot"></i> Upload &amp; Run AI Screening
+    </button>
+  </form>
+  <p class="hint"><i class="fa-solid fa-circle-info"></i> The AI agent will auto-score, rank, and generate 10 interview questions per resume.</p>
+</div>
+
+<div class="card slide-up">
+  <div class="table-toolbar">
+    <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
+      <span class="card-icon"><i class="fa-solid fa-ranking-star"></i></span>
+      Ranked Candidates ({{ resumes|length }})
+    </h3>
+    <div class="table-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search candidates..." data-table-search="candidates-table" aria-label="Search candidates">
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table id="candidates-table">
+      <thead>
+        <tr><th>Rank</th><th>Candidate</th><th>Score</th><th>Match</th><th>Matched Keywords</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for r in resumes %}
+        <tr>
+          <td><span class="badge badge-indigo">#{{ r.rank }}</span></td>
+          <td><strong style="color:var(--text-primary);">{{ r.candidate_name }}</strong></td>
+          <td>
+            <span class="score-bar"><span class="score-fill" style="width: {{ r.score }}%;"></span></span>
+            {{ r.score }}%
+          </td>
+          <td>
+            {% if r.score >= 75 %}<span class="badge badge-green"><i class="fa-solid fa-star"></i> High Match</span>
+            {% elif r.score >= 50 %}<span class="badge badge-amber"><i class="fa-solid fa-star-half-stroke"></i> Medium Match</span>
+            {% else %}<span class="badge badge-grey"><i class="fa-regular fa-star"></i> Low Match</span>{% endif %}
+          </td>
+          <td class="keywords">{{ r.matched_keywords[:120] }}{% if r.matched_keywords|length > 120 %}...{% endif %}</td>
+          <td>
+            {% if r.status == 'shortlisted' %}<span class="badge badge-green"><i class="fa-solid fa-check"></i> Shortlisted</span>
+            {% elif r.status == 'rejected' %}<span class="badge badge-red"><i class="fa-solid fa-xmark"></i> Rejected</span>
+            {% else %}<span class="badge badge-grey"><i class="fa-regular fa-clock"></i> Pending</span>{% endif %}
+          </td>
+          <td class="actions">
+            <a class="btn-small" href="{{ url_for('resume_detail', resume_id=r.id) }}"><i class="fa-solid fa-eye"></i> View</a>
+            <form method="POST" action="{{ url_for('update_resume_status', resume_id=r.id, new_status='shortlisted') }}">
+              <button class="btn-small btn-green" type="submit"><i class="fa-solid fa-check"></i></button>
+            </form>
+            <form method="POST" action="{{ url_for('update_resume_status', resume_id=r.id, new_status='rejected') }}">
+              <button class="btn-small btn-danger" type="submit"><i class="fa-solid fa-xmark"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7">
+          <div class="empty-state">
+            <i class="fa-solid fa-inbox"></i>
+            No resumes uploaded yet for this job.
+          </div>
+        </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

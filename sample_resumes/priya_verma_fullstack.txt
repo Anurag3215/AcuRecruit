@@ -1,0 +1,28 @@
+Priya Verma
+Email: priya.verma@email.com | Phone: +91-9123456780
+
+PROFESSIONAL SUMMARY
+Full-stack developer with 3 years of experience, primarily focused on
+frontend development with React and some backend exposure to Node.js.
+Looking to transition into more backend-heavy Python roles.
+
+TECHNICAL SKILLS
+JavaScript, TypeScript, React, Angular, HTML, CSS, Node.js, MongoDB,
+Git, GitHub, REST API, basic Python, basic SQL
+
+WORK EXPERIENCE
+Frontend Developer — Webify Solutions (2022 - Present)
+- Built responsive UIs using React and TypeScript for e-commerce clients.
+- Integrated REST APIs built by the backend team using Node.js.
+- Worked with MongoDB for product catalog storage.
+
+Junior Developer — Code Crafters (2021 - 2022)
+- Developed landing pages using HTML, CSS and JavaScript.
+- Assisted senior developers with basic Python scripts for data cleanup.
+
+PROJECTS
+- Portfolio Website Builder: React, Node.js, MongoDB.
+- Personal Expense Tracker: Python (basic), SQLite.
+
+EDUCATION
+B.Sc. in Computer Applications, Delhi University (2018-2021)
