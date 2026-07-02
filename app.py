@@ -299,7 +299,7 @@ def resume_detail(resume_id):
 # ---------------------------------------------------------------------------
 
 def init_db():
-    os.makedirs(BASE_DIR, exist_ok=True)s
+    os.makedirs(BASE_DIR, exist_ok=True)
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     with app.app_context():
         db.create_all()
