@@ -19,7 +19,9 @@ ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret-change-me"  # change for production
-DB_PATH = os.path.join(BASE_DIR, "app.db")
+os.makedirs("/tmp/acurecruit", exist_ok=True)
+
+DB_PATH = "/tmp/acurecruit/app.db"
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024  # 25 MB total upload cap
@@ -299,10 +301,11 @@ def resume_detail(resume_id):
 # ---------------------------------------------------------------------------
 
 def init_db():
-    os.makedirs(BASE_DIR, exist_ok=True)
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
     with app.app_context():
         db.create_all()
+
         if not User.query.filter_by(role="admin").first():
             admin = User(
                 name="Default Admin",
@@ -312,7 +315,6 @@ def init_db():
             )
             db.session.add(admin)
             db.session.commit()
-            print("Default admin created -> email: admin@example.com | password: admin123")
 
 
 
